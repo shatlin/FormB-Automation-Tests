@@ -15,7 +15,6 @@ public class LoginPageTests extends TestBase {
     @Given("^i am Formbay User$")
     public void i_am_Formbay_user() throws InterruptedException {
 
-
         launchbrowser(endpoint);
         LoginPage loginPage=new LoginPage(wdriver);
         Assert.assertTrue(loginPage.login());
