@@ -11,7 +11,6 @@ import freemarker.log.Logger;
 
 public class log {
 
-    //Initialize Log4j instance
     private static Logger Log = Logger.getLogger(Log.class.getName());
 
     //We can use it when starting tests
