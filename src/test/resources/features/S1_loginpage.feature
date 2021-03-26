@@ -1,8 +1,8 @@
 #Author Aji
   @StoryId=LoginFunctionality
-  @FeatureFileName=loginpage.feature
-  Feature: Login to Formbay
-
+  @FeatureFileName=S1_loginpage.feature
+@smoke
+  Feature: Feature1_Login to Formbay
       Scenario Outline: Login to Formbay
       Given i am Formbay User
       When i login to Formbay application

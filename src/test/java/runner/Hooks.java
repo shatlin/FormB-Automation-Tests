@@ -1,39 +1,23 @@
 package runner;
-
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import org.junit.AfterClass;
+import org.apache.tools.ant.taskdefs.Get;
 import org.junit.BeforeClass;
-import org.junit.Rule;
-import org.junit.rules.TestRule;
-import org.junit.rules.TestWatcher;
-import org.junit.runner.Description;
-import org.junit.runners.model.Statement;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
-import org.openqa.selenium.io.FileHandler;
 import stepdefinitions.TestBase;
-
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import com.aventstack.extentreports.Status;
-import utils.log;
-
 import javax.swing.*;
 
 public class Hooks extends TestBase{
 
-    private TestBase base;
 
 
     @Before
     public void before(Scenario scenario) throws IOException {
+
         System.out.println("Starting scenario: "+scenario.getName());
-        base=new TestBase();
-        base.BeforeScenario(scenario.getName());
-        base.executionproperties();
+        GetTestBase().BeforeScenario(scenario.getName());
+        GetTestBase().executionproperties();
     }
 
 //    @Rule
@@ -60,18 +44,6 @@ public class Hooks extends TestBase{
 //
 //    };
 
-//    @BeforeAll
-//    public void BeforeAll()
-//    {
-//        System.out.println("Before All is called");
-//        base.BeforeAll();
-//    }
-//
-//    @AfterAll
-//    public void AfterAll()
-//    {
-//        System.out.println("After all is called");
-//    }
 
 
 
@@ -79,6 +51,6 @@ public class Hooks extends TestBase{
     @After
     public void after(Scenario scenario)
     {
-        base.AfterScenario(scenario.getName());
+        GetTestBase().AfterScenario(scenario.getName());
     }
 }

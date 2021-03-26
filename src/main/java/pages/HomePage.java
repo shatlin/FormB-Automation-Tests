@@ -4,9 +4,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class LoginPage extends PageBase{
+public class HomePage extends PageBase{
 
-    public LoginPage(WebDriver driver)
+    public HomePage(WebDriver driver)
     {
         super(driver);
 
@@ -24,12 +24,11 @@ public class LoginPage extends PageBase{
 
     public boolean login() throws InterruptedException {
 
-
         seleniumutils.waitForElement(username).sendKeys("client_trade");
         seleniumutils.waitForElement(password).sendKeys("client_trade");
        // seleniumutils.waitForElement(Continue).click();
         Thread.sleep(3000);
-
+        System.out.println("Login Page accessed");
         return true;
     }
 }

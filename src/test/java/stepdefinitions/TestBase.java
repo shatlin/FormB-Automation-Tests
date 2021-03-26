@@ -1,5 +1,4 @@
 package stepdefinitions;
-
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
@@ -16,7 +15,6 @@ import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import utils.ExcelUtils;
 import utils.log;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -38,33 +36,48 @@ public class TestBase {
     public static String password = null;
     private static String browser = null;
     public static FileInputStream fileInputStream;
-    public static ExtentSparkReporter spark;
-    public static ExtentReports extentReports;
-    public static ExtentTest logger;
+    public  ExtentSparkReporter spark;
+    public  ExtentReports extentReports;
+    public  ExtentTest logger;
     public static ExcelUtils excelUtils;
+    public static boolean firsttest;
+    public static boolean lasttest;
 
+    private static TestBase sInstance;
 
+    public static TestBase GetTestBase() {
+
+        if (null == sInstance) {
+
+            sInstance = new TestBase();
+            String dateName = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
+            String folderDate = new SimpleDateFormat("dd_MM_yyyy").format(new Date());
+            File newfolder= new File(System.getProperty("user.dir") + "/testReport/"+"/"+folderDate+"/");
+            if(!(newfolder.isDirectory()))
+                newfolder.mkdir();
+            String destination = System.getProperty("user.dir") + "/testReport/" +"/"+folderDate+"/"+ "/FormBayAutomation" + dateName
+                    + ".html";
+            sInstance.spark = new ExtentSparkReporter(destination);
+            sInstance.extentReports = new ExtentReports();
+            sInstance.extentReports.attachReporter(sInstance.spark);
+        }
+        return sInstance;
+    }
+
+    protected TestBase() {
+
+    }
 
     public void BeforeScenario(String ScenarioName)
     {
-
-        String dateName = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
-        String folderDate = new SimpleDateFormat("dd_MM_yyyy").format(new Date());
-        File newfolder= new File(System.getProperty("user.dir") + "/testReport/"+"/"+folderDate+"/");
-        if(!(newfolder.isDirectory()))
-            newfolder.mkdir();
-
-        String destination = System.getProperty("user.dir") + "/testReport/" +"/"+folderDate+"/"+ "/FormBayAutomation" + dateName
-                + ".html";
-
-        spark= new ExtentSparkReporter(destination);
-        extentReports = new ExtentReports();
-        extentReports.attachReporter(spark);
-        logger= extentReports.createTest(ScenarioName);
+        logger = extentReports.createTest(ScenarioName);
         logger.log(Status.INFO,"Start the test");
+        firsttest=false;
 
     }
     public String executionproperties() throws IOException {
+
+        lasttest=false;
         strProjectLoc = System.getProperty("user.dir");
         FileInputStream fis = null;
 
@@ -109,20 +122,13 @@ public class TestBase {
             }
 
         }
-
-
-
         return endpoint;
-
     }
 
 
     public void launchbrowser(String url)
     {
-
         if (browser.equalsIgnoreCase("chrome")) {
-
-
             System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "webdrivers" + File.separator + "chromedriver.exe");
             ChromeOptions options = new ChromeOptions();
             options.setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
@@ -168,7 +174,8 @@ public class TestBase {
         wdriver.quit();
         log.endLog(" End "+ScenarioName);
         System.out.println("Finished  scenario: "+ScenarioName);
-        extentReports.flush();
+        if(lasttest)
+            extentReports.flush();
         wdriver.quit();
     }
 
