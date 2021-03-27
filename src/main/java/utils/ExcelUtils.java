@@ -77,7 +77,6 @@ public class ExcelUtils {
             //Write the workbook in file system
             FileOutputStream out = new FileOutputStream(new File(filename));
             workbook.write(out);
-            workbook.close();
             out.close();
             System.out.println("Data written on disk.");
         } catch (Exception e) {
@@ -130,7 +129,7 @@ public class ExcelUtils {
 
 
 
-    public Object[][] ReadExcelFile(String filename, String sheetname) {
+    public Object[][] getExcelData(String filename, String sheetname) {
         try {
             FileInputStream file = new FileInputStream(new File(filename));
 
@@ -148,16 +147,21 @@ public class ExcelUtils {
                         XSSFCell cell = sheet.getRow(i + 1).getCell(k);
                         switch (cell.getCellType())
                         {
-                            case NUMERIC:
+                            case Cell.CELL_TYPE_NUMERIC:
                                 data[i][k] = cell.getNumericCellValue();
                                 break;
-                            case STRING:
+                            case Cell.CELL_TYPE_STRING:
                                 data[i][k]=cell.getStringCellValue();
                                 break;
                         }
 
-                    } catch (NullPointerException NPE) {
+                    }
+                    catch (NullPointerException NPE) {
                         k++;
+                    }
+                    catch (Exception ex)
+                    {
+                        System.out.println("Error reading excel");
                     }
                 }
 
@@ -187,10 +191,10 @@ public class ExcelUtils {
                 try {
                     XSSFCell cell = sheet.getRow(rowNum + 1).getCell(k);
                     switch (cell.getCellType()) {
-                        case NUMERIC:
+                        case Cell.CELL_TYPE_NUMERIC:
                             data[k] = cell.getNumericCellValue();
                             break;
-                        case STRING:
+                        case Cell.CELL_TYPE_STRING:
                             data[k] = cell.getStringCellValue();
                             break;
                     }

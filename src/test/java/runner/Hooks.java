@@ -2,8 +2,6 @@ package runner;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
-import org.apache.tools.ant.taskdefs.Get;
-import org.junit.BeforeClass;
 import stepdefinitions.TestBase;
 import java.io.IOException;
 import javax.swing.*;

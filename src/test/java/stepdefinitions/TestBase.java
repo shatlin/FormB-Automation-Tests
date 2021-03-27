@@ -26,12 +26,7 @@ import java.util.Properties;
 public class TestBase {
     public static WebDriver wdriver;
     public static String websiteurl ;
-    public static String qaendpoint;
-    public static String eteendpoint;
-    public static String localext;
-    public static String env = null;
     private static Properties prop = new Properties();
-
     private static String browser = null;
     public  static ExtentSparkReporter spark;
     public  static ExtentReports extentReports;
@@ -39,7 +34,10 @@ public class TestBase {
     public static ExcelUtils excelUtils;
     public static boolean lastTest;
     private static TestBase sInstance;
-
+    public static Object[][] TestData=null;
+    public static Object[] TestDataRow=null;
+    public static String TestDataExcelFile=null;
+    public static String TestDataExcelSheet=null;
     public static TestBase GetTestBase() throws IOException {
 
         if (sInstance==null)
@@ -62,9 +60,17 @@ public class TestBase {
 
         File testreportfolder= new File(System.getProperty("user.dir") + "/testReport/"+"/"+new SimpleDateFormat("dd_MM_yyyy").format(new Date())+"/");
         if(!(testreportfolder.isDirectory())) testreportfolder.mkdir();
-        sInstance.spark = new ExtentSparkReporter(testreportfolder + "/FormBayAutomation" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date())+ ".html");
-        sInstance.extentReports = new ExtentReports();
-        sInstance.extentReports.attachReporter(sInstance.spark);
+        spark = new ExtentSparkReporter(testreportfolder + "/FormBayAutomation" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date())+ ".html");
+        extentReports = new ExtentReports();
+        extentReports.attachReporter(sInstance.spark);
+        TestDataExcelFile=System.getProperty("user.dir") +"\\src" +"\\test" +"\\resources" +"\\Data"+"\\FormBayAutomationData.xlsx";
+        TestDataExcelSheet="Sheet1";
+        TestData=new ExcelUtils().getExcelData(TestDataExcelFile,TestDataExcelSheet);
+    }
+
+    public static void ReadExcelRow(int row)
+    {
+        TestDataRow=new ExcelUtils().ReadExcelRow(TestDataExcelFile,TestDataExcelSheet,row);
     }
 
     public void BeforeScenario(String ScenarioName)
@@ -72,8 +78,6 @@ public class TestBase {
         logger = extentReports.createTest(ScenarioName);
         logger.log(Status.INFO,"Start the test");
     }
-
-
 
     public void launchbrowser(String url)
     {
@@ -121,7 +125,10 @@ public class TestBase {
     public void AfterScenario(String ScenarioName)
     {
         log.endLog("Finished  scenario: "+ScenarioName);
-        if(lastTest) extentReports.flush();
+        if(lastTest) {
+            System.out.println("All tests completed");
+            extentReports.flush();
+        }
         wdriver.quit();
     }
 

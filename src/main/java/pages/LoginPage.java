@@ -13,20 +13,20 @@ public class LoginPage extends PageBase{
     }
 
     @FindBy(id="username")
-    public WebElement username;
+    public WebElement tbx_username;
 
     @FindBy(id="password")
-    private WebElement password;
+    private WebElement tbx_password;
 
     @FindBy(xpath="//*[@id='new_login']/input")
-    private WebElement Continue;
+    private WebElement btn_Continue;
 
 
-    public boolean login() throws InterruptedException {
+    public boolean login(String username,String password) throws InterruptedException {
 
 
-        seleniumutils.waitForElement(username).sendKeys("client_trade");
-        seleniumutils.waitForElement(password).sendKeys("client_trade");
+        seleniumutils.waitForElement(tbx_username).sendKeys(username);
+        seleniumutils.waitForElement(tbx_password).sendKeys(password);
        // seleniumutils.waitForElement(Continue).click();
         Thread.sleep(3000);
 
