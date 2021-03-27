@@ -17,7 +17,7 @@ public class Hooks extends TestBase{
 
         System.out.println("Starting scenario: "+scenario.getName());
         GetTestBase().BeforeScenario(scenario.getName());
-        GetTestBase().executionproperties();
+
     }
 
 //    @Rule
@@ -49,8 +49,7 @@ public class Hooks extends TestBase{
 
 
     @After
-    public void after(Scenario scenario)
-    {
+    public void after(Scenario scenario) throws IOException {
         GetTestBase().AfterScenario(scenario.getName());
     }
 }

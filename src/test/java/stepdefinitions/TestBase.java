@@ -25,113 +25,63 @@ import java.util.Properties;
 
 public class TestBase {
     public static WebDriver wdriver;
-    public static String endpoint ;
+    public static String websiteurl ;
     public static String qaendpoint;
     public static String eteendpoint;
-    public String localext;
-    public String strProjectLoc = null;
-    public String env = null;
-    private Properties prop = new Properties();
-    public static String username = null;
-    public static String password = null;
-    private static String browser = null;
-    public static FileInputStream fileInputStream;
-    public  ExtentSparkReporter spark;
-    public  ExtentReports extentReports;
-    public  ExtentTest logger;
-    public static ExcelUtils excelUtils;
-    public static boolean firsttest;
-    public static boolean lasttest;
+    public static String localext;
+    public static String env = null;
+    private static Properties prop = new Properties();
 
+    private static String browser = null;
+    public  static ExtentSparkReporter spark;
+    public  static ExtentReports extentReports;
+    public static  ExtentTest logger;
+    public static ExcelUtils excelUtils;
+    public static boolean lastTest;
     private static TestBase sInstance;
 
-    public static TestBase GetTestBase() {
+    public static TestBase GetTestBase() throws IOException {
 
-        if (null == sInstance) {
-
+        if (sInstance==null)
+        {
             sInstance = new TestBase();
-            String dateName = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
-            String folderDate = new SimpleDateFormat("dd_MM_yyyy").format(new Date());
-            File newfolder= new File(System.getProperty("user.dir") + "/testReport/"+"/"+folderDate+"/");
-            if(!(newfolder.isDirectory()))
-                newfolder.mkdir();
-            String destination = System.getProperty("user.dir") + "/testReport/" +"/"+folderDate+"/"+ "/FormBayAutomation" + dateName
-                    + ".html";
-            sInstance.spark = new ExtentSparkReporter(destination);
-            sInstance.extentReports = new ExtentReports();
-            sInstance.extentReports.attachReporter(sInstance.spark);
+            setexecutionproperties();
         }
         return sInstance;
     }
 
     protected TestBase() {
+    }
 
+    public static void setexecutionproperties() throws IOException {
+
+        lastTest=false;
+        prop.load(new FileInputStream(System.getProperty("user.dir") +"/src" +"/test" +"/resources" +"/properties"+"/execution.properties"));
+        browser = prop.getProperty("browser");
+        websiteurl=prop.getProperty("websiteUrl");
+
+        File testreportfolder= new File(System.getProperty("user.dir") + "/testReport/"+"/"+new SimpleDateFormat("dd_MM_yyyy").format(new Date())+"/");
+        if(!(testreportfolder.isDirectory())) testreportfolder.mkdir();
+        sInstance.spark = new ExtentSparkReporter(testreportfolder + "/FormBayAutomation" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date())+ ".html");
+        sInstance.extentReports = new ExtentReports();
+        sInstance.extentReports.attachReporter(sInstance.spark);
     }
 
     public void BeforeScenario(String ScenarioName)
     {
         logger = extentReports.createTest(ScenarioName);
         logger.log(Status.INFO,"Start the test");
-        firsttest=false;
-
     }
-    public String executionproperties() throws IOException {
 
-        lasttest=false;
-        strProjectLoc = System.getProperty("user.dir");
-        FileInputStream fis = null;
-
-        fis = new FileInputStream(strProjectLoc + File.separator+"src" + File.separator+ "test" +  File.separator + "resources"+File.separator +"properties"+ File.separator+"execution.properties");
-        prop.load(fis);
-
-
-        env = prop.getProperty("env");
-        qaendpoint = prop.getProperty("qaendpoint");
-        eteendpoint = prop.getProperty("etendpoint");
-        localext = prop.getProperty("localexecution");
-        username  = prop.getProperty("username");
-        password = prop.getProperty("password");
-        browser = prop.getProperty("browser");
-
-
-        /**
-         * Description: The below logic is to ensure that to execute the code locally or through mvn commnd
-         * please ensure that before pushing your code to bitbucket we need to set the local exectuion variable to No
-         */
-        if (localext.equalsIgnoreCase("yes"))
-        {
-            env =prop.getProperty("env");
-
-            if (env.equalsIgnoreCase("qa"))
-            {
-                endpoint = qaendpoint;
-            }
-            else
-            {
-                endpoint = eteendpoint;
-            }
-        }
-
-        else {
-
-            if (env.equalsIgnoreCase("qa")) {
-
-                endpoint = qaendpoint;
-            } else if (env.equalsIgnoreCase("ete")) {
-                endpoint = eteendpoint;
-            }
-
-        }
-        return endpoint;
-    }
 
 
     public void launchbrowser(String url)
     {
-        if (browser.equalsIgnoreCase("chrome")) {
-            System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + File.separator + "src" + File.separator + "test" + File.separator + "resources" + File.separator + "webdrivers" + File.separator + "chromedriver.exe");
+        if (browser.equalsIgnoreCase("chrome"))
+        {
+            System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir") +"/src/test/resources/webdrivers/chromedriver.exe");
             ChromeOptions options = new ChromeOptions();
-            options.setBinary("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
+            options.setBinary(prop.getProperty("chromeBinary"));
             options.setExperimentalOption("useAutomationExtension", false);
             wdriver = new ChromeDriver(options);
             wdriver.get(url);
@@ -157,7 +107,7 @@ public class TestBase {
 
         else if(browser.equalsIgnoreCase("edge"))
         {
-            System.setProperty("webdriver.edge.driver", System.getProperty("user.dir") + File.separator + "src"+File.separator+"test"+File.separator+"resources"+File.separator+"webdriver"+File.separator+"msedgedriver.exe");
+            System.setProperty("webdriver.edge.driver", System.getProperty("user.dir") + "/src/test/resources/webdriver/msedgedriver.exe");
             HashMap<String, Object> edgePrefs = new HashMap<String, Object>();
             edgePrefs.put("profile.default_content_settings.popups", 0);
             EdgeOptions options = new EdgeOptions();
@@ -166,16 +116,12 @@ public class TestBase {
             wdriver = new EdgeDriver(options);
             wdriver.get(url);
             wdriver.manage().window().maximize();
-
         }
     }
     public void AfterScenario(String ScenarioName)
     {
-        wdriver.quit();
-        log.endLog(" End "+ScenarioName);
-        System.out.println("Finished  scenario: "+ScenarioName);
-        if(lasttest)
-            extentReports.flush();
+        log.endLog("Finished  scenario: "+ScenarioName);
+        if(lastTest) extentReports.flush();
         wdriver.quit();
     }
 
