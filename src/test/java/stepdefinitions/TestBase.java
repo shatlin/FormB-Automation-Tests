@@ -3,7 +3,14 @@ import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.google.common.io.Files;
 import com.sun.jdi.request.InvalidRequestStateException;
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.PropertyConfigurator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -14,7 +21,7 @@ import org.openqa.selenium.ie.InternetExplorerOptions;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import utils.ExcelUtils;
-import utils.log;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -38,6 +45,9 @@ public class TestBase {
     public static Object[] TestDataRow=null;
     public static String TestDataExcelFile=null;
     public static String TestDataExcelSheet=null;
+    public static File  testreportfolder=null;
+    public static Logger mylogger=null;
+
     public static TestBase GetTestBase() throws IOException {
 
         if (sInstance==null)
@@ -55,10 +65,13 @@ public class TestBase {
 
         lastTest=false;
         prop.load(new FileInputStream(System.getProperty("user.dir") +"/src" +"/test" +"/resources" +"/properties"+"/execution.properties"));
+        BasicConfigurator.configure();
+        PropertyConfigurator.configure(System.getProperty("user.dir") +"/src/main/resources/log4j2.properties");
         browser = prop.getProperty("browser");
         websiteurl=prop.getProperty("websiteUrl");
-
-        File testreportfolder= new File(System.getProperty("user.dir") + "/testReport/"+"/"+new SimpleDateFormat("dd_MM_yyyy").format(new Date())+"/");
+        mylogger= LogManager.getLogger(TestBase.class);
+        mylogger.info("Testing Log4J");
+        testreportfolder= new File(System.getProperty("user.dir") + "/testReport/"+"/"+new SimpleDateFormat("dd_MM_yyyy").format(new Date())+"/");
         if(!(testreportfolder.isDirectory())) testreportfolder.mkdir();
         spark = new ExtentSparkReporter(testreportfolder + "/FormBayAutomation" + new SimpleDateFormat("yyyyMMddhhmmss").format(new Date())+ ".html");
         extentReports = new ExtentReports();
@@ -76,7 +89,8 @@ public class TestBase {
     public void BeforeScenario(String ScenarioName)
     {
         logger = extentReports.createTest(ScenarioName);
-        logger.log(Status.INFO,"Start the test");
+        logger.log(Status.INFO,ScenarioName+" Scenario Started ");
+        mylogger.info("Starting  scenario: "+ScenarioName);
     }
 
     public void launchbrowser(String url)
@@ -101,7 +115,7 @@ public class TestBase {
             cap.setCapability(InternetExplorerDriver.IGNORE_ZOOM_SETTING, true);
             cap.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,true);
             cap.setCapability("ignoreProtectedModeSettings", true);
-            System.setProperty("webdriver.ie.driver", System.getProperty("user.dir") + File.separator + "src"+File.separator+"test"+File.separator+"resources"+File.separator+"webdriver"+File.separator+"IEDriverServer.exe");
+            System.setProperty("webdriver.ie.driver", System.getProperty("user.dir") +"/src/test/resources/webdriver/IEDriverServer.exe");
             InternetExplorerOptions options = new InternetExplorerOptions();
             options.merge(cap);
             wdriver = new InternetExplorerDriver(options);
@@ -124,12 +138,22 @@ public class TestBase {
     }
     public void AfterScenario(String ScenarioName)
     {
-        log.endLog("Finished  scenario: "+ScenarioName);
+        logger.log(Status.INFO,ScenarioName+ " Scenario Completed");
+        mylogger.info("Finished  scenario: "+ScenarioName);
         if(lastTest) {
             System.out.println("All tests completed");
             extentReports.flush();
         }
         wdriver.quit();
+    }
+
+    public  String TakeScreenShot() throws IOException {
+        String dateName = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
+        TakesScreenshot ts = (TakesScreenshot) wdriver;
+        File source = ts.getScreenshotAs(OutputType.FILE);
+        String destination = testreportfolder.getAbsolutePath()+"/"+ dateName+ ".png";
+        Files.copy(source, new File(destination));
+        return destination;
     }
 
 }

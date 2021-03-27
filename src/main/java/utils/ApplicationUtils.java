@@ -26,9 +26,7 @@ public class ApplicationUtils extends PageBase {
         javascriptutils.clickByJs(lookUpSearchBtn);
         seleniumutils.waitForStaleElement(searchList);
         flag=seleniumutils.selectAnOptionFromDropDwon(searchListItem,value,searchList);
-        log.info("item is captured");
         return flag;
-
  	}
 	
 	public boolean setFirstValue(WebElement lookUp,WebElement lookUpSearchBtn,List<WebElement> searchListItem, By searchList) throws InterruptedException
@@ -37,11 +35,10 @@ public class ApplicationUtils extends PageBase {
 		javascriptutils.clickByJs(lookUpSearchBtn);
         seleniumutils.waitForStaleElement(searchList);
         flag=seleniumutils.selectFirstValueFromDropDwon(searchListItem, searchList);
-      //  log.info("item is captured");
+
         return flag;		
  	}
-	
-	
+
 	public String setDropDownValue(WebElement dropDown, String value)  {
     	seleniumutils.waitForElement(dropDown).click();
         Select casetype = new Select(dropDown);

@@ -15,7 +15,7 @@ public class    HomePageTests extends TestBase {
 
     @Given("^i am Formbay User for homepage testing with (\\d+)$")
     public void i_am_Formbay_user_for_homepage(int row) throws InterruptedException, IOException {
-        System.out.println("Row Number is "+ row);
+
         ReadExcelRow(row);
         launchbrowser(websiteurl);
         HomePage homePage=new HomePage(wdriver);

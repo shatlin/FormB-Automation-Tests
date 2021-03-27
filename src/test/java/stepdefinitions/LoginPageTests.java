@@ -1,5 +1,7 @@
 package stepdefinitions;
 
+import com.aventstack.extentreports.MediaEntityBuilder;
+import com.aventstack.extentreports.markuputils.Markup;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -16,16 +18,19 @@ public class LoginPageTests extends TestBase {
         launchbrowser(websiteurl);
         LoginPage loginPage=new LoginPage(wdriver);
         Assert.assertTrue(loginPage.login(username,password));
-        logger.log(Status.FAIL, "Test Case (failTest) Status is failed");
+        Assert.assertTrue(false); // Example of how a scenario can fail
+        mylogger.error("Scenario i_am_Formbay_user_loggin_in_with failed");
+        logger.log(Status.FAIL, "Login failed. Will the hook take screenshot?");
     }
 
     @When("^i login to Formbay application$")
     public void i_login_to_Formbay_application() throws IOException {
-        logger.log(Status.PASS, "Test Case (failTest) Status is passed");
+
     }
 
     @Then("^I should see joblist page$")
     public void i_should_see_joblist_page() throws IOException {
-        logger.log(Status.FAIL, "Test Case (failTest) Status is failed");
+        logger.log(Status.FAIL, "i_should_see_joblist_page fail");
+
     }
 }
