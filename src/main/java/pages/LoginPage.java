@@ -21,15 +21,25 @@ public class LoginPage extends PageBase{
     @FindBy(xpath="//*[@id='new_login']/input")
     private WebElement btn_Continue;
 
+    boolean issuccessful = false;
 
-    public boolean login(String username,String password) throws InterruptedException {
+    public boolean entercredential(String username,String password) throws InterruptedException {
 
 
         seleniumutils.waitForElement(tbx_username).sendKeys(username);
         seleniumutils.waitForElement(tbx_password).sendKeys(password);
-       // seleniumutils.waitForElement(Continue).click();
-        Thread.sleep(3000);
+        issuccessful=true;
 
-        return true;
+        return issuccessful;
+    }
+
+    public boolean login() throws InterruptedException {
+
+        issuccessful=false;
+        seleniumutils.waitForElement(btn_Continue).click();
+        Thread.sleep(3000);
+        issuccessful = true;
+
+        return issuccessful;
     }
 }
