@@ -26,8 +26,8 @@ public class LoginPage extends PageBase{
     public boolean entercredential(String username,String password) throws InterruptedException {
 
 
-        seleniumutils.waitForElement(tbx_username).sendKeys(username);
-        seleniumutils.waitForElement(tbx_password).sendKeys(password);
+        seleniumutils.waitForDisplayElement(tbx_username).sendKeys(username);
+        seleniumutils.waitForDisplayElement(tbx_password).sendKeys(password);
         issuccessful=true;
 
         return issuccessful;
@@ -36,7 +36,7 @@ public class LoginPage extends PageBase{
     public boolean login() throws InterruptedException {
 
         issuccessful=false;
-        seleniumutils.waitForElement(btn_Continue).click();
+        seleniumutils.waitForDisplayElement(btn_Continue).click();
         Thread.sleep(3000);
         issuccessful = true;
 

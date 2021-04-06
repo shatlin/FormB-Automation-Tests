@@ -31,13 +31,13 @@ public class JoblistPage extends PageBase{
         isSuccessful=false;
         Thread.sleep(5000);
 
-        if (seleniumutils.waitForElement(lbl_welcome) != null)
+        if (seleniumutils.waitForDisplayElement(lbl_welcome) != null)
             isSuccessful=false;
 
-            if (seleniumutils.waitForElement(link_whats_new) != null)
+            if (seleniumutils.waitForDisplayElement(link_whats_new) != null)
             isSuccessful=false;
 
-        if (seleniumutils.waitForElement(tbx_formid_search) != null)
+        if (seleniumutils.waitForDisplayElement(tbx_formid_search) != null)
             isSuccessful = true;
 
         return isSuccessful;
@@ -45,7 +45,7 @@ public class JoblistPage extends PageBase{
 
     public boolean checkCreateNewJobText() throws InterruptedException {
 
-        if (seleniumutils.waitForElement(btn_create_newjob) != null)
+        if (seleniumutils.waitForDisplayElement(btn_create_newjob) != null)
             return true;
 
         return false;
