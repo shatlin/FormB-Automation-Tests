@@ -8,7 +8,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import pages.PageBase;
-
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -32,7 +31,7 @@ public class SeleniumUtils {
 
     }
 
-    public  WebElement waitForElement(WebElement element) {
+        public  WebElement waitForElement(WebElement element) {
         return new WebDriverWait(Driver, WaitUtils.WAIT_FOR_ELEMENT).ignoring(StaleElementReferenceException.class).
                 until(ExpectedConditions.elementToBeClickable(element));
     }
