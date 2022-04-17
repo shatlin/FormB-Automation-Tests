@@ -9,4 +9,4 @@
       Then I should be able to login
     Examples:
     |UserId|Password|
-    |client_trade|solar@123|
+    |test|test|
