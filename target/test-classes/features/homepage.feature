@@ -1,7 +1,7 @@
 #Author Aji
   @StoryId=HomePageFunctionality
   @FeatureFileName=S2_homepage.feature
-  @smoke
+  @smoke3
   Feature: Feature2_Formbay HomePage
       Scenario Outline: Formbay HomePage
       Given i am Formbay User for homepage testing with <SeletedDataRow>

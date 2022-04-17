@@ -16,26 +16,26 @@ public class    HomePageTests extends TestBase {
     @Given("^i am Formbay User for homepage testing with (\\d+)$")
     public void i_am_Formbay_user_for_homepage(int row) throws InterruptedException, IOException {
 
-//        ReadExcelRow(row);
-//        launchbrowser(websiteurl);
-//        HomePage homePage=new HomePage(wdriver);
-//        logger.log(Status.FAIL,TestDataRow[0].toString());
+        /*ReadExcelRow(row);
+        launchbrowser(websiteurl);
+        HomePage homePage=new HomePage(wdriver);
+        logger.log(Status.FAIL,TestDataRow[0].toString());*/
     }
 
     @When("^i login to Formbay application for homepage$")
     public void i_login_to_Formbay_application_for_homepage() throws IOException {
-    //    logger.log(Status.FAIL, "Test Case (failTest)  is failed");
+        //logger.log(Status.FAIL, "Test Case (failTest)  is failed");
     }
 
     @Then("^I should see joblist page for homepage$")
     public void i_should_see_joblist_page_for_homepage() throws IOException {
-     //   logger.log(Status.PASS, "Test Case (failTest)  is failed");
+        //logger.log(Status.PASS, "Test Case (failTest)  is failed");
     }
 
     @And("^I should execute last test$")
     public void i_should_execute_last_test() throws IOException {
-     //   logger.log(Status.PASS, "Test Case (failTest)  is failed");
-        lastTest=true;
+        //logger.log(Status.PASS, "Test Case (failTest)  is failed");
+        //lastTest=true;
     }
 
 //    @After

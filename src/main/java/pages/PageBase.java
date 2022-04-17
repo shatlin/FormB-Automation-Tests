@@ -11,6 +11,8 @@ public class PageBase {
     protected SeleniumUtils seleniumutils;
     protected JavascriptUtils javascriptutils;
     protected WebDriverListener webDriverListener;
+    protected boolean isSuccessful = false;
+
     public PageBase(WebDriver driver)
     {
         this.Driver=driver;

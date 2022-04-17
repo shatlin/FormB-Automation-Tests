@@ -24,8 +24,8 @@ public class HomePage extends PageBase{
 
     public boolean login() throws InterruptedException {
 
-        seleniumutils.waitForElement(username).sendKeys("client_trade");
-        seleniumutils.waitForElement(password).sendKeys("client_trade");
+        seleniumutils.waitForDisplayElement(username).sendKeys("client_trade");
+        seleniumutils.waitForDisplayElement(password).sendKeys("client_trade");
        // seleniumutils.waitForElement(Continue).click();
         Thread.sleep(3000);
         System.out.println("Login Page accessed");

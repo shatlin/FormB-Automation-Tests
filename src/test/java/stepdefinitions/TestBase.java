@@ -1,14 +1,15 @@
 package stepdefinitions;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.google.common.io.Files;
-import com.sun.jdi.request.InvalidRequestStateException;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.PropertyConfigurator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Assert;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -47,6 +48,8 @@ public class TestBase {
     public static String TestDataExcelSheet=null;
     public static File  testreportfolder=null;
     public static Logger mylogger=null;
+
+    public static boolean isSuccessful = false;
 
     public static TestBase GetTestBase() throws IOException {
 
@@ -147,7 +150,7 @@ public class TestBase {
         wdriver.quit();
     }
 
-    public  String TakeScreenShot() throws IOException {
+    public static String TakeScreenShot() throws IOException {
         String dateName = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
         TakesScreenshot ts = (TakesScreenshot) wdriver;
         File source = ts.getScreenshotAs(OutputType.FILE);
@@ -155,5 +158,19 @@ public class TestBase {
         Files.copy(source, new File(destination));
         return destination;
     }
+
+    public static void actionResult(String successMsg, String failMsg) throws IOException {
+        Assert.assertTrue(isSuccessful);
+
+        if (isSuccessful){
+
+            logger.log(Status.PASS, successMsg);
+        }
+        else{
+            logger.log(Status.FAIL, failMsg);
+            logger.log(Status.FAIL, MediaEntityBuilder.createScreenCaptureFromPath(TakeScreenShot()).build());
+        }
+    }
+
 
 }
